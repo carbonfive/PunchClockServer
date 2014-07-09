@@ -10,9 +10,11 @@ configure do
 
 end
 
-use Rack::Auth::Basic do |username, password|
-  username == ENV['AUTH_USER'] && password == ENV['AUTH_PASSWORD']
-end  
+if ENV['AUTH_USER'] && ENV['AUTH_PASSWORD']
+  use Rack::Auth::Basic do |username, password|
+    username == ENV['AUTH_USER'] && password == ENV['AUTH_PASSWORD']
+  end
+end
 
 configure :production do
   ZeroPush.auth_token = ENV["ZEROPUSH_PROD_TOKEN"]
@@ -23,4 +25,4 @@ configure :development do
   DB.logger = Logger.new($stdout)
   ZeroPush.auth_token = ENV["ZEROPUSH_DEV_TOKEN"]
 end
- 
+
